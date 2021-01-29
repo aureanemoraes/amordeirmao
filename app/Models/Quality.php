@@ -19,7 +19,7 @@ class Quality extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'url_user'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -29,7 +29,7 @@ class Quality extends Model
     |--------------------------------------------------------------------------
     */
     public function users() {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'quality_id', 'id');
     }
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,14 @@ class Quality extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-
+    public function getUsersProfilesUrls() {
+        $users = '<ul>';
+        foreach($this->users as $user) {
+             $users .= '<li><a href="' . route('user.show', $user->id). '" target="_blank">' . $user->name . '</a></li>';
+        }
+        $users .= '</ul>';
+        return $users;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use HasFactory, Notifiable, SoftDeletes;
 
     /**
@@ -74,4 +75,6 @@ class User extends Authenticatable
         return $this->hasMany(Responsable::class, 'responsable_id', 'id');
     }
     */
+
+    // Accessors
 }

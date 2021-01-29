@@ -8,3 +8,4 @@
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('address') }}'><i class='nav-icon la la-question'></i> Addresses</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('donatetype') }}'><i class='nav-icon la la-question'></i> DonateTypes</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('donate') }}'><i class='nav-icon la la-question'></i> Donates</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('user') }}'><i class='nav-icon la la-question'></i> Users</a></li>

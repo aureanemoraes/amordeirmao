@@ -4,9 +4,8 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class DirectorRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +26,7 @@ class DirectorRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'integer', 'unique:directors', Rule::notIn(Manager::get()->pluck('user_id')->toArray())]
+            // 'name' => 'required|min:5|max:255'
         ];
     }
 

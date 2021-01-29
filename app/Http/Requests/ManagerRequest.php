@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use App\Models\Director;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ManagerRequest extends FormRequest
 {
@@ -26,8 +28,8 @@ class ManagerRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|integer|unique:managers',
-            'director_id' => 'required|integer'
+            'user_id' => ['required', 'integer', 'unique:managers', Rule::notIn(Director::get()->pluck('user_id')->toArray())],
+            'director_id' => ['required', 'integer']
         ];
     }
 

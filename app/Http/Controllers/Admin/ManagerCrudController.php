@@ -21,45 +21,70 @@ class ManagerCrudController extends CrudController
         CRUD::setEntityNameStrings('manager', 'managers');
     }
 
+    protected function setupShowOperation() {
+        $this->crud->set('show.setFromDb', false);
+
+        CRUD::addcolumn([
+            'name'  => 'url',
+            'label' => 'Usuário', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getUserProfileUrl', // the method in your Model
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'url_director',
+            'label' => 'Diretor', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getDirectorProfileUrl', // the method in your Model
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'url_fies',
+            'label' => 'Fiés', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getBelieversProfilesUrls', // the method in your Model
+        ]);
+    }
+
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'user', 
-            'type' => 'relationship', 
+            'name' => 'user',
+            'type' => 'relationship',
             'label' => 'Usuário',
             'attribute' => 'name'
-        ]); 
+        ]);
         CRUD::addColumn([
-            'name' => 'director_id', 
-            'type' => 'select', 
+            'name' => 'director_id',
+            'type' => 'select',
             'entity' => 'director.user',
             'label' => 'Diretor',
             'attribute' => 'name'
 
-        ]); 
-        //CRUD::addColumn(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']); 
-    
+        ]);
+        //CRUD::addColumn(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']);
+
     }
 
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ManagerRequest::class);
-        CRUD::addField([  
+        CRUD::addField([
             'label'     => "Usuário",
             'type'      => 'select',
-            'name'      => 'user_id', 
-            'entity'    => 'User', 
-            'attribute' => 'name', 
-        ]); 
-        CRUD::addField([  
+            'name'      => 'user_id',
+            'entity'    => 'User',
+            'attribute' => 'name',
+        ]);
+        CRUD::addField([
             'label'     => "Diretor",
             'type'      => 'select',
-            'name'      => 'director_id', 
-            'entity'    => 'Director', 
+            'name'      => 'director_id',
+            'entity'    => 'Director',
             'attribute' => 'user_id',
-                
-        ]); 
-        //CRUD::addField(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']); 
+
+        ]);
+        //CRUD::addField(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']);
     }
 
     protected function setupUpdateOperation()

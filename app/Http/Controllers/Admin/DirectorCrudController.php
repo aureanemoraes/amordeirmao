@@ -23,22 +23,39 @@ class DirectorCrudController extends CrudController
         CRUD::setEntityNameStrings('director', 'directors');
     }
 
+    protected function setupShowOperation() {
+        $this->crud->set('show.setFromDb', false);
+
+        CRUD::addcolumn([
+            'name'  => 'url',
+            'label' => 'Usuário', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getUserProfileUrl', // the method in your Model
+        ]);
+        CRUD::addcolumn([
+            'name'  => 'url_fies',
+            'label' => 'Fiés', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getBelieversProfilesUrls', // the method in your Model
+        ]);
+    }
+
     protected function setupListOperation()
     {
-        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']); 
+        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']);
     }
 
     protected function setupCreateOperation()
     {
         CRUD::setValidation(DirectorRequest::class);
 
-        CRUD::addField([  
+        CRUD::addField([
             'label'     => "Usuário",
             'type'      => 'select',
-            'name'      => 'user_id', 
-            'entity'    => 'User', 
-            'attribute' => 'name', 
-        ]); 
+            'name'      => 'user_id',
+            'entity'    => 'User',
+            'attribute' => 'name',
+        ]);
     }
 
     protected function setupUpdateOperation()
