@@ -15,8 +15,8 @@ class CreateDonatesTable extends Migration
     {
         Schema::create('donates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description');
-            $table->string('status');
+            $table->longText('description');
+            $table->string('status')->default('pendente');
             $table->unsignedBigInteger('donate_type_id');
             $table->foreign('donate_type_id')->references('id')->on('donate_types');
             $table->unsignedBigInteger('user_id');
