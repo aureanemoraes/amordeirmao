@@ -33,13 +33,22 @@ class Responsable extends Model
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
-    */
-    public function responsable() {
-        return $this->belongsTo(User::class);
+    public function director() {
+        return $this->belongsTo(Director::class);
     }
 
+    public function manager() {
+        return $this->belongsTo(Manager::class);
+    }
+    */
+    
+
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function responsable_person() {
+        return $this->belongsTo(User::class, 'responsable_id', 'id');
     }
     /*
     |--------------------------------------------------------------------------

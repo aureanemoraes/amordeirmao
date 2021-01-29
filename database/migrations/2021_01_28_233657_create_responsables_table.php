@@ -18,7 +18,7 @@ class CreateResponsablesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('responsable_id');
-            $table->foreign('responsable_id')->references('id')->on('responsables');
+            $table->foreign('responsable_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

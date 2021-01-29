@@ -19,7 +19,7 @@ class CreateManagersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('director_id');
             $table->foreign('director_id')->references('id')->on('directors');
-            $table->tinyInteger('status');
+            //$table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

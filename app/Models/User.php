@@ -50,6 +50,25 @@ class User extends Authenticatable
         return $this->belongsTo(Quality::class);
     }
 
+    public function donates() {
+        return $this->hasMany(Donate::class);
+    }
+
+    public function directors() {
+        return $this->hasMany(Director::class, 'user_id', 'id');
+    }
+
+    public function managers() {
+        return $this->hasMany(Manager::class, 'user_id', 'id');
+    }
+
+    public function phones() {
+        return $this->hasMany(Phone::class, 'user_id', 'id');
+    }
+
+    public function addresses() {
+        return $this->belongsToMany(Address::class, 'users_addresses', 'user_id', 'address_id');
+    }
     /*
     public function fies() {
         return $this->hasMany(Responsable::class, 'responsable_id', 'id');

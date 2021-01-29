@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Models\Quality;
 use Backpack\CRUD\app\Http\Controllers\Auth\RegisterController as BackpackRegisterController;
+use Validator;
 
 
 class RegisterController extends BackpackRegisterController
@@ -19,7 +20,7 @@ class RegisterController extends BackpackRegisterController
             'name'                              => 'required|max:255',
             'email'                             => 'required|max:255|unique:'.$users_table,
             'password'                          => 'required|min:6|confirmed',
-            'quality'                          => 'required',
+            'quality_id'                          => 'required',
             backpack_authentication_column()    => 'required|max:11|unique:'.$users_table,
         ]);
 

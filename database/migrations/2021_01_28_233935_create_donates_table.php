@@ -19,6 +19,8 @@ class CreateDonatesTable extends Migration
             $table->string('status');
             $table->unsignedBigInteger('donate_type_id');
             $table->foreign('donate_type_id')->references('id')->on('donate_types');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

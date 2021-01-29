@@ -19,7 +19,7 @@ class Phone extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['number', 'type', 'user_id'];
+    protected $fillable = ['number_of_phone', 'type_of_phone', 'user_id'];
     // protected $hidden = [];
     // protected $dates = [];
 

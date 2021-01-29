@@ -35,8 +35,8 @@ class Address extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function users() {
+        return $this->belongsToMany(User::class, 'users_addresses', 'address_id', 'user_id');
     }
     /*
     |--------------------------------------------------------------------------

@@ -19,7 +19,7 @@ class Manager extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['user_id', 'director_id', 'status'];
+    protected $fillable = ['user_id', 'director_id'];
     // protected $hidden = [];
     // protected $dates = [];
 

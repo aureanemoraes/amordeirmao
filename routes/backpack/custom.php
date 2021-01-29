@@ -9,6 +9,9 @@
 Route::get('admin/register', [App\Http\Controllers\Admin\Auth\RegisterController::class, 'showRegistrationForm'])
     ->name('backpack.auth.register')
     ->middleware('web');
+    Route::post('admin/register', [App\Http\Controllers\Admin\Auth\RegisterController::class, 'register'])
+    ->name('backpack.auth.register')
+    ->middleware('web');
 //Route::get('admin/register', [App\Http\Controllers\Admin\Auth\RegisterController::class, 'showRegistrationForm'])->name('backpack.auth.register');
 
 

@@ -19,9 +19,10 @@ class Director extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['user', 'status'];
+    protected $fillable = ['user_id'];
     // protected $hidden = [];
     // protected $dates = [];
+    //protected $with = ['user'];
 
     /*
     |--------------------------------------------------------------------------

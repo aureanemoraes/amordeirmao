@@ -17,7 +17,7 @@ class CreateDirectorsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->tinyInteger('status');
+           // $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

@@ -19,11 +19,6 @@ class DonateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     * 
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\Donate::class);
@@ -31,40 +26,40 @@ class DonateCrudController extends CrudController
         CRUD::setEntityNameStrings('donate', 'donates');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     * 
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::addColumn(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
+        // Campo visível para admini/gerente/diretor
+        CRUD::addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Situação']);
+        CRUD::addColumn([
+            'name' => 'user', 
+            'type' => 'relationship', 
+            'label' => 'Fiel',
+            'attribute' => 'name'
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+        ]);
+        CRUD::addColumn([
+            'name' => 'donate_type', 
+            'type' => 'relationship', 
+            'label' => 'Tipo',
+            'attribute' => 'name'
+        ]);
+    
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     * 
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(DonateRequest::class);
 
-        CRUD::setFromDb(); // fields
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
-         */
+        CRUD::addField(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
+        // Campo visível para admini/gerente/diretor
+        CRUD::addField(['name' => 'status', 'type' => 'text', 'label' => 'Situação (Somente gerentes)']);
+        // Campo visível para admini/gerente/diretor
+        CRUD::addField([
+            'name' => 'donate_type_id', 
+            'type' => 'relationship', 
+            'label' => 'Tipo',
+        ]);
     }
 
     /**

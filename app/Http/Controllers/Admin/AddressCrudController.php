@@ -43,6 +43,12 @@ class AddressCrudController extends CrudController
         CRUD::addField(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
         CRUD::addField(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
         CRUD::addField(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
+        CRUD::addField([   
+            'label'     => "Usuários",
+            'type'      => 'select2_multiple',
+            'name'      => 'users', // the method that defines the relationship in your Model
+            'attribute' => 'name'
+        ]);
 
     }
 

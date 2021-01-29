@@ -52,19 +52,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="cpf">{{ trans('backpack::base.quality') }}</label>
+                            <label class="control-label" for="cpf">{{ trans('backpack::base.quality_id') }}</label>
 
                             <div>
-                                <select class="form-control{{ $errors->has('quality') ? ' is-invalid' : '' }}" name="quality" id="quality" value="{{ old('quality') }}">
+                                <select class="form-control{{ $errors->has('quality_id') ? ' is-invalid' : '' }}" name="quality_id" id="quality_id" value="{{ old('quality_id') }}">
                                     <option disabled selected>Selecione...</option>
-                                    @foreach($qualities as $quality)
-                                        <option value="{{$quality->id}}">{{$quality->name}}</option>
+                                    @foreach($qualities as $quality_id)
+                                        <option value="{{$quality_id->id}}">{{$quality_id->name}}</option>
                                     @endforeach
                                 </select>
 
-                                @if ($errors->has('quality'))
+                                @if ($errors->has('quality_id'))
                                     <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('quality') }}</strong>
+                                            <strong>{{ $errors->first('quality_id') }}</strong>
                                         </span>
                                 @endif
                             </div>

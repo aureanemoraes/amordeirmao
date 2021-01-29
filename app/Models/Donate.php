@@ -19,7 +19,7 @@ class Donate extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['description', 'status', 'donate_type_id'];
+    protected $fillable = ['description', 'status', 'donate_type_id', 'user_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -28,7 +28,13 @@ class Donate extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    protected static function booted()
+    {
+        static::creating(function ($donate) {
+            $user_id = backpack_user()->id;
+            $donate->user_id = $user_id;
+        });
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -36,6 +42,10 @@ class Donate extends Model
     */
     public function donate_type() {
         return $this->belongsTo(DonateType::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
     /*
     |--------------------------------------------------------------------------

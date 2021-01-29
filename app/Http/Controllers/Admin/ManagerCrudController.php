@@ -6,11 +6,6 @@ use App\Http\Requests\ManagerRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class ManagerCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class ManagerCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -19,11 +14,6 @@ class ManagerCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     * 
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\Manager::class);
@@ -31,48 +21,47 @@ class ManagerCrudController extends CrudController
         CRUD::setEntityNameStrings('manager', 'managers');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     * 
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::addColumn([
+            'name' => 'user', 
+            'type' => 'relationship', 
+            'label' => 'Usuário',
+            'attribute' => 'name'
+        ]); 
+        CRUD::addColumn([
+            'name' => 'director_id', 
+            'type' => 'select', 
+            'entity' => 'director.user',
+            'label' => 'Diretor',
+            'attribute' => 'name'
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+        ]); 
+        //CRUD::addColumn(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']); 
+    
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     * 
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ManagerRequest::class);
-
-        CRUD::setFromDb(); // fields
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
-         */
+        CRUD::addField([  
+            'label'     => "Usuário",
+            'type'      => 'select',
+            'name'      => 'user_id', 
+            'entity'    => 'User', 
+            'attribute' => 'name', 
+        ]); 
+        CRUD::addField([  
+            'label'     => "Diretor",
+            'type'      => 'select',
+            'name'      => 'director_id', 
+            'entity'    => 'Director', 
+            'attribute' => 'user_id',
+                
+        ]); 
+        //CRUD::addField(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']); 
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     * 
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
