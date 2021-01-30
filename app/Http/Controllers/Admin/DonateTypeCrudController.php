@@ -12,7 +12,7 @@ class DonateTypeCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -24,6 +24,23 @@ class DonateTypeCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
+        $this->crud->query->withCount('donates'); // this will add a tags_count column to the results
+        $this->crud->addColumn([
+            'name'      => 'donates_count', // name of relationship method in the model
+            'type'      => 'text',
+            'label'     => 'Doações', // Table column heading
+            'suffix'    => ' doações', // to show "123 tags" instead of "123"
+                          'wrapper' => [
+                                  // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
+                'href' => function($crud, $column, $entry) {
+                    return route('donate.index');
+                },
+                'class' => function($crud, $column, $entry) {
+                    return 'text-danger';
+                },
+                'target' => '__blank',
+            ]
+        ]);
 
     }
 

@@ -41,7 +41,7 @@ class Responsable extends Model
         return $this->belongsTo(Manager::class);
     }
     */
-    
+
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -61,6 +61,14 @@ class Responsable extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    public function getUserProfileUrl() {
+        return '<a href="' . route('user.show', $this->user->id). '" target="_blank">' . $this->user->name . '</a>';
+    }
+
+    public function getResponsablePersonProfileUrl() {
+        return '<a href="' . route('user.show', $this->responsable_person->id). '" target="_blank">' . $this->responsable_person->name . '</a>';
+    }
 
     /*
     |--------------------------------------------------------------------------

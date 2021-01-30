@@ -22,42 +22,60 @@ class ResponsableCrudController extends CrudController
         CRUD::setEntityNameStrings('responsable', 'responsables');
     }
 
+    protected function setupShowOperation()
+    {
+        $this->crud->set('show.setFromDb', false);
+
+        CRUD::addcolumn([
+            'name'  => 'url_user',
+            'label' => 'Usuário', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getUserProfileUrl', // the method in your Model
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'url_responsable_person',
+            'label' => 'Responsável', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getResponsablePersonProfileUrl', // the method in your Model
+        ]);
+    }
 
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'user', 
-            'type' => 'relationship', 
-            'label' => 'Fiel',
+            'name' => 'user',
+            'type' => 'relationship',
+            'label' => 'Usuário',
             'attribute' => 'name'
-        ]); 
-        
+        ]);
         CRUD::addColumn([
-            'name' => 'responsable_person', 
-            'type' => 'relationship', 
-            'label' => 'Fiel',
+            'name' => 'responsable_person',
+            'type' => 'relationship',
+            'label' => 'Responsável',
             'attribute' => 'name'
-        ]); 
+
+        ]);
     }
 
 
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ResponsableRequest::class);
-        CRUD::addField([  
+        CRUD::addField([
             'label'     => "Fiel",
             'type'      => 'select',
-            'name'      => 'user_id', 
-            'entity'    => 'User', 
-            'attribute' => 'name', 
-        ]); 
+            'name'      => 'user_id',
+            'entity'    => 'User',
+            'attribute' => 'name',
+        ]);
         CRUD::addField([   // select2_grouped
             'label'     => 'Responsáveis',
             'type'      => 'select_from_array', //https://github.com/Laravel-Backpack/CRUD/issues/502
             'name'      => 'responsable_id',
             'options' => User::has('directors')->orHas('managers')->get()->pluck('name','id')->toArray(),
-        ]); 
-        
+        ]);
+
     }
 
 

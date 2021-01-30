@@ -49,7 +49,14 @@ class Address extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-
+    public function getUsersProfilesUrls() {
+        $users = '<ul>';
+        foreach($this->users as $user) {
+            $users .= '<li><a href="' . route('user.show', $user->id). '" target="_blank">' . $user->name . '</a></li>';
+        }
+        $users .= '</ul>';
+        return $users;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

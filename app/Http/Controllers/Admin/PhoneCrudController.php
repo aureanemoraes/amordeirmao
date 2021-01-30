@@ -21,11 +21,34 @@ class PhoneCrudController extends CrudController
         CRUD::setEntityNameStrings('phone', 'phones');
     }
 
+    protected function setupShowOperation() {
+        $this->crud->set('show.setFromDb', false);
+
+        CRUD::addcolumn([
+            'name'  => 'number_of_phone',
+            'label' => 'Número', // Table column heading
+            'type'  => 'string'
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'type_of_phone',
+            'label' => 'Tipo', // Table column heading
+            'type'  => 'string',
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'url_user',
+            'label' => 'Usuário', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getUserProfileUrl', // the method in your Model
+        ]);
+    }
+
     protected function setupListOperation()
     {
         CRUD::addColumn(['name' => 'number_of_phone', 'type' => 'text', 'label' => 'Número']);
         CRUD::addColumn(['name' => 'type_of_phone', 'type' => 'text', 'label' => 'Tipo']);
-        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário']); 
+        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']);
 
     }
 
@@ -34,13 +57,13 @@ class PhoneCrudController extends CrudController
         CRUD::setValidation(PhoneRequest::class);
         CRUD::addField(['name' => 'number_of_phone', 'type' => 'text', 'label' => 'Número']);
         CRUD::addField(['name' => 'type_of_phone', 'type' => 'text', 'label' => 'Tipo']);
-        CRUD::addField([  
+        CRUD::addField([
             'label'     => "Usuário",
             'type'      => 'select',
-            'name'      => 'user_id', 
-            'entity'    => 'User', 
-            'attribute' => 'name', 
-        ]); 
+            'name'      => 'user_id',
+            'entity'    => 'User',
+            'attribute' => 'name',
+        ]);
 
     }
 

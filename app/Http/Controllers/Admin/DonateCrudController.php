@@ -32,19 +32,19 @@ class DonateCrudController extends CrudController
         // Campo visível para admini/gerente/diretor
         CRUD::addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Situação']);
         CRUD::addColumn([
-            'name' => 'user', 
-            'type' => 'relationship', 
+            'name' => 'user',
+            'type' => 'relationship',
             'label' => 'Fiel',
             'attribute' => 'name'
 
         ]);
         CRUD::addColumn([
-            'name' => 'donate_type', 
-            'type' => 'relationship', 
+            'name' => 'donate_type',
+            'type' => 'relationship',
             'label' => 'Tipo',
             'attribute' => 'name'
         ]);
-    
+
     }
 
     protected function setupCreateOperation()
@@ -56,15 +56,15 @@ class DonateCrudController extends CrudController
         CRUD::addField(['name' => 'status', 'type' => 'text', 'label' => 'Situação (Somente gerentes)']);
         // Campo visível para admini/gerente/diretor
         CRUD::addField([
-            'name' => 'donate_type_id', 
-            'type' => 'relationship', 
+            'name' => 'donate_type_id',
+            'type' => 'relationship',
             'label' => 'Tipo',
         ]);
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -72,4 +72,14 @@ class DonateCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
+    public function filteredListOperation($donate_type_id)
+    {
+        $this->crud->hasAccessOrFail('list');
+        $this->crud->addClause('where','donate_type_id',$donate_type_id);
+        $this->data['crud'] = $this->crud;
+        $this->data['title'] = ucfirst($this->crud->entity_name_plural);
+        return view($this->crud->getListView(), $this->data);
+    }
+
 }

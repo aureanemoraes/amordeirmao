@@ -23,6 +23,21 @@ class AddressCrudController extends CrudController
         CRUD::setEntityNameStrings('address', 'addresses');
     }
 
+    protected function setupShowOperation() {
+        $this->crud->set('show.setFromDb', false);
+
+        CRUD::addColumn(['name' => 'zip_code', 'type' => 'text', 'label' => 'CEP']);
+        CRUD::addColumn(['name' => 'public_place', 'type' => 'text', 'label' => 'Logradouro']);
+        CRUD::addColumn(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
+        CRUD::addColumn(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
+        CRUD::addColumn(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
+        CRUD::addcolumn([
+            'name'  => 'url_user',
+            'label' => 'Usuários', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getUsersProfilesUrls', // the method in your Model
+        ]);
+    }
 
     protected function setupListOperation()
     {
@@ -31,6 +46,8 @@ class AddressCrudController extends CrudController
         CRUD::addColumn(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
         CRUD::addColumn(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
         CRUD::addColumn(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
+        CRUD::addColumn(['name' => 'users', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']);
+
     }
 
 
@@ -43,7 +60,7 @@ class AddressCrudController extends CrudController
         CRUD::addField(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
         CRUD::addField(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
         CRUD::addField(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
-        CRUD::addField([   
+        CRUD::addField([
             'label'     => "Usuários",
             'type'      => 'select2_multiple',
             'name'      => 'users', // the method that defines the relationship in your Model

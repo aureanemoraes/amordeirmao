@@ -48,7 +48,9 @@ class Phone extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-
+    public function getUserProfileUrl() {
+        return '<a href="' . route('user.show', $this->user->id). '" target="_blank">' . $this->user->name . '</a>';
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

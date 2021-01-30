@@ -3,7 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use App\Models\Director;
+use App\Models\Manager;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ResponsableRequest extends FormRequest
 {
@@ -26,7 +29,13 @@ class ResponsableRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|integer|unique:responsables',
+            'user_id' => [
+                'required',
+                'integer',
+                'unique:responsables',
+                Rule::notIn(Manager::get()->pluck('user_id')->toArray()),
+                Rule::notIn(Director::get()->pluck('user_id')->toArray()),
+            ],
             'responsable_id' => 'required|integer'
         ];
     }
