@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DonateRequest;
+use App\Models\DonateType;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -28,6 +29,10 @@ class DonateCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        $donate_type_id = request()->query('donate_type');
+        if(isset($donate_type_id)) {
+            $this->crud->addClause('where', 'donate_type_id', '=', $donate_type_id);
+        }
         CRUD::addColumn(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
         // Campo visível para admini/gerente/diretor
         CRUD::addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Situação']);

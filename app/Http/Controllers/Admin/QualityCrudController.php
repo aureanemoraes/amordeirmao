@@ -17,7 +17,7 @@ class QualityCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -26,28 +26,33 @@ class QualityCrudController extends CrudController
         CRUD::setEntityNameStrings('quality', 'qualities');
     }
 
-    protected function setupShowOperation() {
-        $this->crud->set('show.setFromDb', false);
-
-        CRUD::addcolumn(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
-        CRUD::addcolumn([
-            'name'  => 'url_user',
-            'label' => 'Usuários', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getUsersProfilesUrls', // the method in your Model
-        ]);
-    }
-
     protected function setupListOperation()
     {
         CRUD::setFromDb(); // columns
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
+        $this->crud->query->withCount('users'); // this will add a tags_count column to the results
+        $this->crud->addColumn([
+            'name'      => 'users_count', // name of relationship method in the model
+            'type'      => 'text',
+            'label'     => 'Usuários', // Table column heading
+            'suffix'    => ' usuários', // to show "123 tags" instead of "123"
+            'wrapper' => [
+                // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
+                'href' => function($crud, $column, $entry) {
+                    return route('user.index', ['quality' => $entry->id]);
+                },
+                'class' => function($crud, $column, $entry) {
+                    return 'text-danger';
+                },
+                'target' => '__blank',
+            ]
+        ]);
     }
 
     protected function setupCreateOperation()
     {
         CRUD::setValidation(QualityRequest::class);
-
-        CRUD::setFromDb(); // fields
+        CRUD::addField(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
     }
 
 

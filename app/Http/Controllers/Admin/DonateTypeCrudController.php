@@ -33,7 +33,7 @@ class DonateTypeCrudController extends CrudController
                           'wrapper' => [
                                   // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
                 'href' => function($crud, $column, $entry) {
-                    return route('donate.index');
+                    return route('donate.index', ['donate_type' => $entry->id]);
                 },
                 'class' => function($crud, $column, $entry) {
                     return 'text-danger';
@@ -41,7 +41,6 @@ class DonateTypeCrudController extends CrudController
                 'target' => '__blank',
             ]
         ]);
-
     }
 
     protected function setupCreateOperation()
