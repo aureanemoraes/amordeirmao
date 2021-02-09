@@ -27,6 +27,7 @@ class UserCrudController extends CrudController
         $this->crud->query->withCount('donates'); // this will add a tags_count column to the results
 
         CRUD::addColumn(['name' => 'id', 'type' => 'text', 'label' => 'ID']);
+        CRUD::addColumn(['name' => 'is_validated', 'type' => 'boolean', 'label' => 'Usuário validado']);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
         CRUD::addColumn(['name' => 'email', 'type' => 'email', 'label' => 'E-mail']);
         CRUD::addColumn(['name' => 'cpf', 'type' => 'text', 'label' => 'CPF']);
@@ -52,7 +53,12 @@ class UserCrudController extends CrudController
                 'target' => '__blank',
             ]
         ]);
-        CRUD::addColumn(['name' => 'is_validated', 'type' => 'boolean', 'label' => 'Usuário validado']);
+        CRUD::addColumn([
+            'name'  => 'user_type',
+            'label' => 'Tipo de usuário',
+            'type'  => 'model_function',
+            'function_name' => 'getUserType',
+        ]);
     }
 
     protected function setupListOperation()

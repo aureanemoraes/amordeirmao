@@ -19,7 +19,7 @@ class User extends Authenticatable
         'password',
         'cpf',
         'quality_id',
-        'is_validated'
+        'is_validated',
     ];
 
     protected $hidden = [
@@ -37,7 +37,7 @@ class User extends Authenticatable
     }
 
     public function donates() {
-        return $this->hasMany(Donate::class, 'user_id', 'id');
+        return $this->hasMany(Donate::class);
     }
 
     public function directors() {
@@ -55,11 +55,46 @@ class User extends Authenticatable
     public function addresses() {
         return $this->belongsToMany(Address::class, 'users_addresses', 'user_id', 'address_id');
     }
-    /*
-    public function fies() {
-        return $this->hasMany(Responsable::class, 'responsable_id', 'id');
+    // Functions
+    public function getUserType() {
+        $id = $this->attributes['id'];
+        $isDirector = Director::where('user_id', $id)->first();
+        if(isset($isDirector)) {
+            $managers_count = Manager::where('director_id', $isDirector->id)->count();
+            $managers_link = '<a href="' . route('manager.index', ['director' => $isDirector->id]) . '">' . $managers_count . ' gerentes' . '</a>';
+            $believers_count = Responsable::where('responsable_id', $isDirector->id)->count();
+            $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isDirector->id]) . '">' . $believers_count . ' fiés' . '</a>';
+            return 'Diretor - Responsável por: ' . $managers_link . ' e ' . $believers_link;
+        } else {
+            $isManager = Manager::where('user_id', $id)->first();
+            if(isset($isManager)) {
+                $director_link = '<a href="' . route('user.show', $isManager->director->user->id) . '">' . $isManager->director->user->name . '</a>';
+                $believers_count = Responsable::where('responsable_id', $isManager->id)->count();
+                $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isManager->id]) . '">' . $believers_count . ' fiés' . '</a>';
+                return 'Gerente do(a) diretor(a) ' . $director_link . ' - Responsável por: ' . $believers_link;
+            } else {
+                return 'Padrão';
+            }
+        }
     }
-    */
-
     // Accessors
+    public function getUserTypeAttribute() {
+        $id = $this->attributes['id'];
+        $isDirector = Director::where('user_id', $id)->first();
+        if(isset($isDirector)) {
+            return 'Diretor';
+        } else {
+            $isManager = Manager::where('user_id', $id)->first();
+            if(isset($isManager)) {
+                return 'Gerente';
+            } else {
+                return 'Padrão';
+            }
+        }
+    }
+
+    // Mutators
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = ucwords($value);
+    }
 }
