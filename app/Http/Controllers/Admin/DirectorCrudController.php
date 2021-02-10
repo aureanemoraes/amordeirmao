@@ -13,7 +13,7 @@ class DirectorCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
 
     public function setup()
@@ -42,7 +42,37 @@ class DirectorCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']);
+        CRUD::addColumn([
+            'name' => 'user',
+            'type' => 'relationship',
+            'label' => 'Usuário',
+            'attribute' => 'name',
+            'wrapper' => [
+                'href' => function($crud, $column, $entry) {
+                    return route('user.show', $entry->user_id);
+                },
+                'class' => function($crud, $column, $entry) {
+                    return 'text-danger';
+                },
+                'target' => '__blank',
+            ]
+        ]);
+        CRUD::addcolumn([
+            'name'  => 'believers',
+            'label' => 'Fiés', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getBelieversCount', // the method in your Model
+            'wrapper' => [
+                // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
+                'href' => function($crud, $column, $entry) {
+                    return route('responsable.index', ['responsable' => $entry->id]);
+                },
+                'class' => function($crud, $column, $entry) {
+                    return 'text-danger';
+                },
+                'target' => '__blank',
+            ]
+        ]);
     }
 
     protected function setupCreateOperation()

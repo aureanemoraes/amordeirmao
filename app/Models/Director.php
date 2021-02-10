@@ -51,22 +51,11 @@ class Director extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getBelieversProfilesUrls() {
-        $data = Responsable::where('responsable_id', $this->user_id)->get();
-        //dd($believers);
-        if($data->count() > 0) {
-            $believers = '<ul>';
-            foreach($data as $believer) {
-                $believers .= '<li><a href="' . route('user.show', $believer->user_id). '" target="_blank">' . $believer->user->name . '</a></li>';
-            }
-            $believers .= '</ul>';
-            return $believers;
-        }
+    public function getBelieversCount() {
+        $belivers_count = Responsable::where('responsable_id', $this->user_id)->count();
+        return $belivers_count . ' fiés';
     }
 
-    public function getUserProfileUrl() {
-        return '<a href="' . route('user.show', $this->user->id). '" target="_blank">' . $this->user->name . '</a>';
-    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
