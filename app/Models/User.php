@@ -73,7 +73,14 @@ class User extends Authenticatable
                 $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isManager->id]) . '">' . $believers_count . ' fiés' . '</a>';
                 return 'Gerente do(a) diretor(a) ' . $director_link . ' - Responsável por: ' . $believers_link;
             } else {
-                return 'Padrão';
+                $responsable = Responsable::where('user_id', $this->id)->first();
+                if(isset($responsable)) {
+                    $responsable_link = '<a href="' . route('user.show', $responsable->responsable_person->id) . '">' . $responsable->responsable_person->name . '</a>';
+                    return 'Padrão - Sob supervisão do(a): ' . $responsable_link;
+                } else {
+                    return 'Padrão - Sob supervisão do(a): Sem supervisor';
+                }
+
             }
         }
     }
@@ -93,8 +100,33 @@ class User extends Authenticatable
         }
     }
 
+    public function getFullAddressAttribute($value) {
+        if(count($this->addresses) > 0 ) {
+            if(count($this->addresses) == 1) {
+                foreach($this->addresses as $address) {
+                    $address_formatted = $address->zip_code . ' - ' . $address->public_place . ', ' . $address->number . ', ' . $address->neighborhood . ' (' . $address->reference_place . ')';
+                }
+                return $address_formatted;
+            } else {
+                $address_formatted = '';
+                foreach($this->addresses as $address) {
+                    $address_formatted .= $address->zip_code . ' - ' . $address->public_place . ', ' . $address->number . ', ' . $address->neighborhood . ' (' . $address->reference_place . '), ';
+                }
+                return $address_formatted;
+            }
+        }
+    }
+
     // Mutators
     public function setNameAttribute($value) {
         $this->attributes['name'] = ucwords($value);
+    }
+
+    public function setPasswordAttribute($value) {
+        if(!isset($this->password)) {
+            $this->attributes['password'] = bcrypt($value);
+        } else {
+            $this->attributes['password'] = $value;
+        }
     }
 }

@@ -13,7 +13,7 @@ class ResponsableCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -22,39 +22,34 @@ class ResponsableCrudController extends CrudController
         CRUD::setEntityNameStrings('responsable', 'responsables');
     }
 
-    protected function setupShowOperation()
-    {
-        $this->crud->set('show.setFromDb', false);
-
-        CRUD::addcolumn([
-            'name'  => 'url_user',
-            'label' => 'Usuário', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getUserProfileUrl', // the method in your Model
-        ]);
-
-        CRUD::addcolumn([
-            'name'  => 'url_responsable_person',
-            'label' => 'Responsável', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getResponsablePersonProfileUrl', // the method in your Model
-        ]);
-    }
-
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'user',
-            'type' => 'relationship',
-            'label' => 'Usuário',
-            'attribute' => 'name'
+            // Select
+            'label'     => 'Usuário',
+            'type'      => 'select',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
+            ],
         ]);
         CRUD::addColumn([
-            'name' => 'responsable_person',
-            'type' => 'relationship',
-            'label' => 'Responsável',
-            'attribute' => 'name'
+            // Select
+            'label'     => 'Responsável',
+            'type'      => 'select',
+            'name'      => 'responsable_id',
+            'entity'    => 'responsable_person',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
 
+            ],
         ]);
     }
 

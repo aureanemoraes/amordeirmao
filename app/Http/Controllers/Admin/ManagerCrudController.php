@@ -12,7 +12,7 @@ class ManagerCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -21,48 +21,49 @@ class ManagerCrudController extends CrudController
         CRUD::setEntityNameStrings('manager', 'managers');
     }
 
-    protected function setupShowOperation() {
-        $this->crud->set('show.setFromDb', false);
-
-        CRUD::addcolumn([
-            'name'  => 'url',
-            'label' => 'Usuário', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getUserProfileUrl', // the method in your Model
-        ]);
-
-        CRUD::addcolumn([
-            'name'  => 'url_director',
-            'label' => 'Diretor', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getDirectorProfileUrl', // the method in your Model
-        ]);
-
-        CRUD::addcolumn([
-            'name'  => 'url_fies',
-            'label' => 'Fiés', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getBelieversProfilesUrls', // the method in your Model
-        ]);
-    }
-
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'user',
-            'type' => 'relationship',
-            'label' => 'Usuário',
-            'attribute' => 'name'
-        ]);
-        CRUD::addColumn([
-            'name' => 'director_id',
-            'type' => 'select',
-            'entity' => 'director.user',
-            'label' => 'Diretor',
-            'attribute' => 'name'
+            // Select
+            'label'     => 'Usuário',
+            'type'      => 'select',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
 
+            ],
         ]);
-        //CRUD::addColumn(['name' => 'status', 'type' => 'boolean', 'label' => 'Ativo']);
+
+        CRUD::addColumn([
+            // Select
+            'label'     => 'Diretor',
+            'type'      => 'select',
+            'name'      => 'director_id',
+            'entity'    => 'director.user',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
+
+            ],
+        ]);
+
+        CRUD::addcolumn([
+            'name'  => 'believers',
+            'label' => 'Fiés',
+            'type'  => 'model_function',
+            'function_name' => 'getBelieversCount',
+            'wrapper' => [
+                'href' => function($crud, $column, $entry) {
+                    return route('responsable.index', ['responsable' => $entry->id]);
+                }
+            ]
+        ]);
 
     }
 

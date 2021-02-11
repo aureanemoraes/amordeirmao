@@ -32,25 +32,35 @@ class UserCrudController extends CrudController
         CRUD::addColumn(['name' => 'email', 'type' => 'email', 'label' => 'E-mail']);
         CRUD::addColumn(['name' => 'cpf', 'type' => 'text', 'label' => 'CPF']);
         CRUD::addColumn([
+            // Select
+            'label'     => 'Endereço(s)',
+            'type'      => 'text',
+            'name'      => 'full_address',
+        ]);
+        CRUD::addColumn([
+            // Select
+            'label'     => 'Telefone(s)',
+            'type'      => 'select',
+            'name'      => 'phones',
+            'entity'    => 'phones',
+            'attribute' => 'number_of_phone',
+        ]);
+        CRUD::addColumn([
             'name' => 'quality',
             'type' => 'relationship',
             'label' => 'Qualidade',
             'attribute' => 'name'
         ]);
         CRUD::addColumn([
-            'name'      => 'donates_count', // name of relationship method in the model
+            'name'      => 'donates_count',
             'type'      => 'text',
-            'label'     => 'Doações cadastradas', // Table column heading
-            'suffix'    => ' doações', // to show "123 tags" instead of "123"
+            'label'     => 'Doações cadastradas',
+            'suffix'    => ' doações',
             'wrapper' => [
-                // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
                 'href' => function($crud, $column, $entry) {
                     return route('donate.index', ['user' => $entry->id]);
                 },
-                'class' => function($crud, $column, $entry) {
-                    return 'text-primary';
-                },
-                'target' => '__blank',
+
             ]
         ]);
         CRUD::addColumn([
@@ -88,8 +98,9 @@ class UserCrudController extends CrudController
         CRUD::addField(['name' => 'cpf', 'type' => 'text', 'label' => 'CPF']);
         CRUD::addField(['name' => 'email', 'type' => 'email', 'label' => 'E-mail']);
         CRUD::addField([
-            'name' => 'quality',
-            'type' => 'relationship',
+            'name' => 'quality_id',
+            'type' => 'select',
+            'entity' => 'quality',
             'label' => 'Qualidade',
             'attribute' => 'name'
         ]);

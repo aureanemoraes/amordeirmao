@@ -37,17 +37,17 @@ class DonateCrudController extends CrudController
         // Campo visível para admini/gerente/diretor
         CRUD::addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Situação']);
         CRUD::addColumn([
-            'name' => 'user',
-            'type' => 'relationship',
-            'label' => 'Fiel',
-            'attribute' => 'name'
-
-        ]);
-        CRUD::addColumn([
-            'name' => 'donate_type',
-            'type' => 'relationship',
-            'label' => 'Tipo',
-            'attribute' => 'name'
+            // Select
+            'label'     => 'Fiel',
+            'type'      => 'select',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
+            ],
         ]);
 
     }

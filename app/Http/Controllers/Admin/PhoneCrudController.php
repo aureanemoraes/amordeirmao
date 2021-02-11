@@ -12,7 +12,7 @@ class PhoneCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     public function setup()
     {
@@ -21,9 +21,8 @@ class PhoneCrudController extends CrudController
         CRUD::setEntityNameStrings('phone', 'phones');
     }
 
-    protected function setupShowOperation() {
-        $this->crud->set('show.setFromDb', false);
-
+    protected function setupListOperation()
+    {
         CRUD::addcolumn([
             'name'  => 'number_of_phone',
             'label' => 'Número', // Table column heading
@@ -36,19 +35,19 @@ class PhoneCrudController extends CrudController
             'type'  => 'string',
         ]);
 
-        CRUD::addcolumn([
-            'name'  => 'url_user',
-            'label' => 'Usuário', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getUserProfileUrl', // the method in your Model
+        CRUD::addColumn([
+            // Select
+            'label'     => 'Usuário',
+            'type'      => 'select',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return route('user.show',$related_key);
+                },
+            ],
         ]);
-    }
-
-    protected function setupListOperation()
-    {
-        CRUD::addColumn(['name' => 'number_of_phone', 'type' => 'text', 'label' => 'Número']);
-        CRUD::addColumn(['name' => 'type_of_phone', 'type' => 'text', 'label' => 'Tipo']);
-        CRUD::addColumn(['name' => 'user', 'type' => 'relationship', 'label' => 'Usuário', 'attribute' => 'name']);
 
     }
 

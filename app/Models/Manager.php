@@ -65,14 +65,11 @@ class Manager extends Model
         }
     }
 
-    public function getUserProfileUrl() {
-        return '<a href="' . route('user.show', $this->user->id). '" target="_blank">' . $this->user->name . '</a>';
+    public function getBelieversCount() {
+        $belivers_count = Responsable::where('responsable_id', $this->user_id)->count();
+        return $belivers_count . ' fiés';
     }
 
-    public function getDirectorProfileUrl() {
-        //dd($this->director->user);
-        return '<a href="' . route('user.show', $this->director->user->id). '" target="_blank">' . $this->director->user->name . '</a>';
-    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
