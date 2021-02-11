@@ -6,9 +6,8 @@ use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
-
     public function authorize()
     {
         // only allow updates if the user is logged in
@@ -22,7 +21,6 @@ class UserRequest extends FormRequest
             'cpf' => ['required', 'max:11', Rule::unique('users')->ignore($this->id), 'cpf'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($this->id)],
             'quality_id' => 'required|integer',
-            'password' => 'required'
         ];
     }
 

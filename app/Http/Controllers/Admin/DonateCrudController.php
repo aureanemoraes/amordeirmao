@@ -58,7 +58,7 @@ class DonateCrudController extends CrudController
 
         CRUD::addField(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
         // Campo visível para admini/gerente/diretor
-        CRUD::addField(['name' => 'status', 'type' => 'text', 'label' => 'Situação (Somente gerentes)']);
+        CRUD::addField(['name' => 'status', 'type' => 'hidden', 'value' => 'pendente', 'label' => 'Situação']);
         // Campo visível para admini/gerente/diretor
         CRUD::addField([
             'name' => 'donate_type_id',
@@ -67,12 +67,6 @@ class DonateCrudController extends CrudController
         ]);
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();

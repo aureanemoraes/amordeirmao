@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -111,6 +112,17 @@ class UserCrudController extends CrudController
 
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        CRUD::setValidation(UserUpdateRequest::class);
+        CRUD::addField(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
+        CRUD::addField(['name' => 'cpf', 'type' => 'text', 'label' => 'CPF']);
+        CRUD::addField(['name' => 'email', 'type' => 'email', 'label' => 'E-mail']);
+        CRUD::addField([
+            'name' => 'quality_id',
+            'type' => 'select',
+            'entity' => 'quality',
+            'label' => 'Qualidade',
+            'attribute' => 'name'
+        ]);
+        CRUD::addField(['name' => 'is_validated', 'type' => 'boolean', 'label' => 'Usuário validado']);
     }
 }
