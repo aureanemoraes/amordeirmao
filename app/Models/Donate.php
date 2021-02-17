@@ -64,4 +64,8 @@ class Donate extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = ucfirst($value);
+    }
 }

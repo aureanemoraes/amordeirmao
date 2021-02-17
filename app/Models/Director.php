@@ -55,7 +55,8 @@ class Director extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getBelieversCount() {
+    public function getBelieversCount()
+    {
         $belivers_count = Responsable::where('responsable_id', $this->user_id)->count();
         return $belivers_count . ' fiés';
     }

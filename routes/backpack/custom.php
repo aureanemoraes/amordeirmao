@@ -23,7 +23,8 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    //Route::get('admin/register', 'App\Http\Controllers\Auth\RegisterController')->name('backpack.auth.register');
+    //Route::get('donatetype/ajax-donatetype-options', 'DonateCrudController@donateTypeOptions')->name('donatetype.options');
+
     Route::crud('quality', 'QualityCrudController');
     Route::crud('director', 'DirectorCrudController');
     Route::crud('manager', 'ManagerCrudController');
