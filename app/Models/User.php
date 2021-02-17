@@ -20,6 +20,7 @@ class User extends Authenticatable
         'cpf',
         'quality_id',
         'is_validated',
+        'is_admin'
     ];
 
     protected $hidden = [
@@ -62,15 +63,15 @@ class User extends Authenticatable
         if(isset($isDirector)) {
             $managers_count = Manager::where('director_id', $isDirector->id)->count();
             $managers_link = '<a href="' . route('manager.index', ['director' => $isDirector->id]) . '">' . $managers_count . ' gerentes' . '</a>';
-            $believers_count = Responsable::where('responsable_id', $isDirector->id)->count();
+            $believers_count = Responsable::where('responsable_id', $isDirector->user_id)->count();
             $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isDirector->id]) . '">' . $believers_count . ' fiés' . '</a>';
             return 'Diretor - Responsável por: ' . $managers_link . ' e ' . $believers_link;
         } else {
             $isManager = Manager::where('user_id', $id)->first();
             if(isset($isManager)) {
                 $director_link = '<a href="' . route('user.show', $isManager->director->user->id) . '">' . $isManager->director->user->name . '</a>';
-                $believers_count = Responsable::where('responsable_id', $isManager->id)->count();
-                $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isManager->id]) . '">' . $believers_count . ' fiés' . '</a>';
+                $believers_count = Responsable::where('responsable_id', $isManager->user_id)->count();
+                $believers_link = '<a href="' . route('responsable.index', ['responsable' => $isManager->user_id]) . '">' . $believers_count . ' fiés' . '</a>';
                 return 'Gerente do(a) diretor(a) ' . $director_link . ' - Responsável por: ' . $believers_link;
             } else {
                 $responsable = Responsable::where('user_id', $this->id)->first();

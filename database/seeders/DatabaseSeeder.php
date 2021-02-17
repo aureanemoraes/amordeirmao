@@ -17,7 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             QualitySeeder::class,
             DonateTypeSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            DirectorSeeder::class,
+            ManagerSeeder::class,
+            ResponsableSeeder::class
         ]);
     }
 }

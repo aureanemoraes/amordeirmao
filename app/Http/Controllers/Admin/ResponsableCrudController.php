@@ -24,6 +24,11 @@ class ResponsableCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        $responsable_id = request()->query('responsable');
+        if(isset($responsable_id)) {
+            $this->crud->addClause('where', 'responsable_id', '=', $responsable_id);
+        }
+
         CRUD::addColumn([
             // Select
             'label'     => 'Usuário',

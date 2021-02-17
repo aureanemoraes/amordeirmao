@@ -23,6 +23,11 @@ class ManagerCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        $director_id = request()->query('director');
+        if(isset($director_id)) {
+            $this->crud->addClause('where', 'director_id', '=', $director_id);
+        }
+
         CRUD::addColumn([
             // Select
             'label'     => 'Usuário',
@@ -60,7 +65,7 @@ class ManagerCrudController extends CrudController
             'function_name' => 'getBelieversCount',
             'wrapper' => [
                 'href' => function($crud, $column, $entry) {
-                    return route('responsable.index', ['responsable' => $entry->id]);
+                    return route('responsable.index', ['responsable' => $entry->user_id]);
                 }
             ]
         ]);

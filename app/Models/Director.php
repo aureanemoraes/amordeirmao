@@ -39,6 +39,10 @@ class Director extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function managers() {
+        return $this->hasMany(Manager::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

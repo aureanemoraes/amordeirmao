@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('quality_id');
             $table->foreign('quality_id')->references('id')->on('qualities');
             $table->tinyInteger('is_validated')->default(0);
+            $table->tinyInteger('is_admin')->default(0);
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

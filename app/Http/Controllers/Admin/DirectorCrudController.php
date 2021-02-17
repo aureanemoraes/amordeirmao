@@ -23,23 +23,6 @@ class DirectorCrudController extends CrudController
         CRUD::setEntityNameStrings('director', 'directors');
     }
 
-    protected function setupShowOperation() {
-        $this->crud->set('show.setFromDb', false);
-
-        CRUD::addcolumn([
-            'name'  => 'url',
-            'label' => 'Usuário', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getUserProfileUrl', // the method in your Model
-        ]);
-        CRUD::addcolumn([
-            'name'  => 'url_fies',
-            'label' => 'Fiés', // Table column heading
-            'type'  => 'model_function',
-            'function_name' => 'getBelieversProfilesUrls', // the method in your Model
-        ]);
-    }
-
     protected function setupListOperation()
     {
         CRUD::addColumn([
@@ -60,8 +43,21 @@ class DirectorCrudController extends CrudController
             'function_name' => 'getBelieversCount',
             'wrapper' => [
                 'href' => function($crud, $column, $entry) {
-                    return route('responsable.index', ['responsable' => $entry->id]);
+                    return route('responsable.index', ['responsable' => $entry->user_id]);
                 },
+            ]
+        ]);
+
+        $this->crud->query->withCount('managers');
+        $this->crud->addColumn([
+            'name'      => 'managers_count',
+            'type'      => 'text',
+            'label'     => 'Gerentes',
+            'suffix'    => ' gerente(s)',
+            'wrapper' => [
+                'href' => function($crud, $column, $entry) {
+                    return route('manager.index', ['director' => $entry->id]);
+                }
             ]
         ]);
     }

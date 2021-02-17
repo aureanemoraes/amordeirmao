@@ -106,6 +106,8 @@ class UserCrudController extends CrudController
             'attribute' => 'name'
         ]);
         CRUD::addField(['name' => 'password', 'type' => 'password', 'label' => 'Senha']);
+        CRUD::addField(['name' => 'is_admin', 'type' => 'boolean', 'label' => 'Administrador']);
+
         CRUD::addField(['name' => 'is_validated', 'type' => 'boolean', 'label' => 'Usuário validado']);
 
     }
@@ -123,6 +125,8 @@ class UserCrudController extends CrudController
             'label' => 'Qualidade',
             'attribute' => 'name'
         ]);
+        CRUD::addField(['name' => 'is_admin', 'type' => 'boolean', 'label' => 'Administrador']);
+
         CRUD::addField(['name' => 'is_validated', 'type' => 'boolean', 'label' => 'Usuário validado']);
     }
 }

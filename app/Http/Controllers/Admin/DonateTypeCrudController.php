@@ -30,8 +30,8 @@ class DonateTypeCrudController extends CrudController
             'type'      => 'text',
             'label'     => 'Doações', // Table column heading
             'suffix'    => ' doações', // to show "123 tags" instead of "123"
-                  'wrapper' => [
-                                  // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
+            'wrapper' => [
+                // 'element' => 'span', // OPTIONAL; defaults to "a" (anchor element)
                 'href' => function($crud, $column, $entry) {
                     return route('donate.index', ['donate_type' => $entry->id]);
                 },
