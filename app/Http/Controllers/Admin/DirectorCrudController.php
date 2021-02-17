@@ -20,7 +20,7 @@ class DirectorCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Director::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/director');
-        CRUD::setEntityNameStrings('director', 'directors');
+        CRUD::setEntityNameStrings('diretor', 'diretores');
     }
 
     protected function setupListOperation()

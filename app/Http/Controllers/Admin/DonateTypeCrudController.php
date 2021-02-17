@@ -18,7 +18,7 @@ class DonateTypeCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\DonateType::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/donatetype');
-        CRUD::setEntityNameStrings('donatetype', 'donate_types');
+        CRUD::setEntityNameStrings('tipos de doação', 'tipos de doações');
     }
 
     protected function setupListOperation()

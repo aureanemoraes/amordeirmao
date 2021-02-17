@@ -19,7 +19,7 @@ class ResponsableCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Responsable::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/responsable');
-        CRUD::setEntityNameStrings('responsable', 'responsables');
+        CRUD::setEntityNameStrings('responsável', 'responsáveis');
     }
 
     protected function setupListOperation()

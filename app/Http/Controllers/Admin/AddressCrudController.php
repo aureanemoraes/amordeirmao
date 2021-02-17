@@ -20,7 +20,7 @@ class AddressCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Address::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/address');
-        CRUD::setEntityNameStrings('address', 'addresses');
+        CRUD::setEntityNameStrings('endereço', 'endereços');
     }
 
 

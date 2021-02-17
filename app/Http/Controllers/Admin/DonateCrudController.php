@@ -24,7 +24,7 @@ class DonateCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Donate::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/donate');
-        CRUD::setEntityNameStrings('donate', 'donates');
+        CRUD::setEntityNameStrings('doação', 'doações');
     }
 
     protected function setupListOperation()

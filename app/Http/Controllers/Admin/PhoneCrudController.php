@@ -18,7 +18,7 @@ class PhoneCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Phone::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/phone');
-        CRUD::setEntityNameStrings('phone', 'phones');
+        CRUD::setEntityNameStrings('telefone', 'telefones');
     }
 
     protected function setupListOperation()

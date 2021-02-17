@@ -18,7 +18,7 @@ class ManagerCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Manager::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/manager');
-        CRUD::setEntityNameStrings('manager', 'managers');
+        CRUD::setEntityNameStrings('gerente', 'gerentes');
     }
 
     protected function setupListOperation()

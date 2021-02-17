@@ -23,7 +23,7 @@ class QualityCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Quality::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/quality');
-        CRUD::setEntityNameStrings('quality', 'qualities');
+        CRUD::setEntityNameStrings('qualidade', 'qualidades');
     }
 
     protected function setupListOperation()

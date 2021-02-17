@@ -118,6 +118,7 @@
       <path value="$PROJECT_DIR$/vendor/prologue/alerts" />
       <path value="$PROJECT_DIR$/vendor/thiagocfn/inscricaoestadual" />
       <path value="$PROJECT_DIR$/vendor/geekcom/validator-docs" />
+      <path value="$PROJECT_DIR$/vendor/lucascudo/laravel-pt-br-localization" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
