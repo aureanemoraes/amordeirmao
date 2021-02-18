@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 
 class User extends Authenticatable
 {
@@ -116,6 +117,45 @@ class User extends Authenticatable
                 return $address_formatted;
             }
         }
+    }
+
+    public function getValidsIdsAttribute() {
+        $id = $this->attributes['id'];
+        $director = Director::where('user_id', $id)->first();
+        if(isset($director)) {
+            $valid_ids[] = $director->user_id;
+            $managers = Manager::where('director_id', $director->id)->pluck('user_id');
+            if (isset($managers)) {
+                $valid_ids = Arr::collapse([$valid_ids, $managers]);
+            }
+            $believers = Responsable::whereIn('responsable_id', $valid_ids)->pluck('user_id');
+            if (isset($believers)) {
+                $valid_ids = Arr::collapse([$valid_ids, $believers]);
+            }
+        }
+        $manager = Manager::where('user_id', $id)->first();
+        if(isset($manager)) {
+            $valid_ids[] = $manager->user_id;
+            $believers = Responsable::whereIn('responsable_id', $valid_ids)->pluck('user_id');
+            if(isset($believers)) {
+                $valid_ids = Arr::collapse([$valid_ids, $believers]);
+            }
+        }
+
+        if(!isset($director) && !isset($manager)) {
+            $valid_ids[] = $id;
+            $responsable = Responsable::where('user_id', $id)->first();
+            $director = Director::where('user_id', $responsable->responsable_id)->first();
+            if(isset($director)) {
+                $valid_ids[] = $director->user_id;
+            }
+            $manager = Manager::where('user_id', $responsable->responsable_id)->first();
+            if(isset($manager)) {
+                $valid_ids[] = $manager->user_id;
+                $valid_ids[] = $manager->director_id;
+            }
+        }
+        return $valid_ids;
     }
 
     // Mutators

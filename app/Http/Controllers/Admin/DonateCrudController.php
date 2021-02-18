@@ -30,19 +30,23 @@ class DonateCrudController extends CrudController
     protected function setupShowOperation() {
         $this->crud->set('show.setFromDb', false);
         // PERMISSÕES
-        // Diretor
         $current_user = backpack_user(); // Usuário logado atualmente
+        dd($current_user->valids_ids);
+        // Verificação ADMIN
         $is_admin = backpack_user()->is_admin; // Verificação se o usuário é ADMIN
-        $author_id = $this->crud->getCurrentEntry()->user_id; // Autor da doação atual
-        $director = $current_user->directors()->where('user_id', $current_user->id)->first(); // Verificação se o usuário é um diretor
-        // Se o usuário não for um ADMIN, ele deve possuir restrições de acesso
+        // Admin: tudo
+        // Fiel: só pode ver as doações que ele mesmo cadastrou
+        // Diretor: doações cadastradas pelos seus fiés e fiés de seus gerentes
+        // Gerente: doações cadastradas pelos seus fiés
         if(!$is_admin) {
-            if(isset($director)) {
-                if($director->user_id != $author_id) {
-                    $this->crud->denyAccess('show');
-                }
+            $author_id = $this->crud->getCurrentEntry()->user_id; // Autor da doação atual
+            $responsable = Responsable::where('user_id', $author_id)->first();
+            //dd($responsable->real_responsable_id);
+            if(($current_user->id != $author_id) && ($current_user->id != $responsable->real_responsable_id)) {
+                $this->crud->denyAccess('show');
             }
         }
+
 
         CRUD::addColumn(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
         // Campo visível para admini/gerente/diretor
@@ -73,14 +77,25 @@ class DonateCrudController extends CrudController
         // Diretor: doações cadastradas pelos seus fiés e fiés de seus gerentes
         // Gerente: doações cadastradas pelos seus fiés
         if(!$current_user->is_admin) {
+            // Diretor
             $director = $current_user->directors()->where('user_id', $current_user->id)->first();
             if(isset($director)) {
                 $managers = $director->managers()->pluck('user_id');
                 $responsables = $managers;
                 $responsables[] = $director->user_id;
                 $believers = Responsable::whereIn('responsable_id', json_decode($responsables))->pluck('user_id');
-                //dd($responsables, $believers);
                 $this->crud->addClause('whereIn', 'user_id', json_decode($believers));
+            }
+            // Gerente
+            $manager = $current_user->managers()->where('user_id', $current_user->id)->first();
+            if(isset($manager)) {
+                $believers = Responsable::where('responsable_id', $manager->user_id)->pluck('user_id');
+                $this->crud->addClause('whereIn', 'user_id', json_decode($believers));
+            }
+            // Fiel
+            if(!isset($director) && !isset($manager)) {
+                $this->crud->addClause('where', 'user_id', $current_user->id);
+
             }
         }
 
