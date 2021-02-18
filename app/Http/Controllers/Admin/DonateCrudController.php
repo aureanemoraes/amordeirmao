@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DonateRequest;
 use App\Http\Requests\DonateUpdateRequest;
+use App\Models\Director;
 use App\Models\DonateType;
+use App\Models\Manager;
+use App\Models\Responsable;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Arr;
@@ -26,6 +29,21 @@ class DonateCrudController extends CrudController
 
     protected function setupShowOperation() {
         $this->crud->set('show.setFromDb', false);
+        // PERMISSÕES
+        // Diretor
+        $current_user = backpack_user(); // Usuário logado atualmente
+        $is_admin = backpack_user()->is_admin; // Verificação se o usuário é ADMIN
+        $author_id = $this->crud->getCurrentEntry()->user_id; // Autor da doação atual
+        $director = $current_user->directors()->where('user_id', $current_user->id)->first(); // Verificação se o usuário é um diretor
+        // Se o usuário não for um ADMIN, ele deve possuir restrições de acesso
+        if(!$is_admin) {
+            if(isset($director)) {
+                if($director->user_id != $author_id) {
+                    $this->crud->denyAccess('show');
+                }
+            }
+        }
+
         CRUD::addColumn(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
         // Campo visível para admini/gerente/diretor
         CRUD::addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Situação']);
@@ -49,14 +67,23 @@ class DonateCrudController extends CrudController
     {
         // PERMISSÕES
         $current_user = backpack_user();
+        // Verificação ADMIN
+        // Admin: tudo
+        // Fiel: só pode ver as doações que ele mesmo cadastrou
         // Diretor: doações cadastradas pelos seus fiés e fiés de seus gerentes
-        $director = $current_user->directors()->where('user_id', $current_user->id)->first();
-        if(isset($director)) {
-            $managers = $director->managers()->pluck('user_id');
-            $managers[]= $director->user_id;
-            $this->crud->addClause('whereIn', 'user_id', json_decode($managers));
-
+        // Gerente: doações cadastradas pelos seus fiés
+        if(!$current_user->is_admin) {
+            $director = $current_user->directors()->where('user_id', $current_user->id)->first();
+            if(isset($director)) {
+                $managers = $director->managers()->pluck('user_id');
+                $responsables = $managers;
+                $responsables[] = $director->user_id;
+                $believers = Responsable::whereIn('responsable_id', json_decode($responsables))->pluck('user_id');
+                //dd($responsables, $believers);
+                $this->crud->addClause('whereIn', 'user_id', json_decode($believers));
+            }
         }
+
         // FILTROS URL
         // Tipo de doação
         $donate_type_id = request()->query('donate_type');
@@ -120,8 +147,22 @@ class DonateCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(DonateRequest::class);
+        // DIRETORES e GERENTES não podem cadastrar doações
+        $current_user = backpack_user();
+        // Verificação se ADMIN
+        if(!$current_user->is_admin) {
+            $is_director = Director::where('user_id', $current_user->id)->exists(); // Verificação se é um DIRETOR
+            if(!$is_director) {
+                $is_manager = Manager::where('user_id', $current_user->id)->exists(); // Verificação se é um GERENTE
+                if($is_manager) {
+                    $this->crud->denyAccess('create'); // Permissão de CRIAÇÃO NEGADA
+                }
+            } else {
+                $this->crud->denyAccess('create'); // Permissão de CRIAÇÃO NEGADA
+            }
+        }
 
+        CRUD::setValidation(DonateRequest::class);
         CRUD::addField(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
         // Campo visível para admini/gerente/diretor
         CRUD::addField(['name' => 'status', 'type' => 'hidden', 'value' => 'Pendente', 'label' => 'Situação']);
@@ -135,6 +176,37 @@ class DonateCrudController extends CrudController
 
     protected function setupUpdateOperation()
     {
+        // Verificando o STATUS atual da doação - Se a doação estiver CONCLUÍDA, ela não pode mais ser alterada
+        $status = $this->crud->getCurrentEntry()->status;
+        if($status == 'Concluída') {
+            $this->crud->denyAccess('update');
+        }
+        // A doação pode ser alterada:
+        $current_user_id = backpack_user()->user_id; // Usuário logado atualmente
+        $author_id = $this->crud->getCurrentEntry()->user_id; // Autor da doação atual
+        // Verificando se o usuário que está tentanto fazer o update é:
+        // O autor
+        $is_author = $author_id == $current_user_id;
+        // O responsável do autor
+        $is_responsable_for_author = Responsable::select('responsable_id')->where('user_id', $author_id)->get();
+        dd($is_responsable_for_author);
+        // O responsável do responsável do autor
+        if($author_id == $current_user_id) {
+            CRUD::setValidation(DonateRequest::class);
+            CRUD::addField(['name' => 'description', 'type' => 'textarea', 'label' => 'Descrição']);
+            CRUD::addField([
+                'name' => 'status',
+                'type' => 'text',
+                'label' => 'Situação',
+                'attributes' => ['disabled' => 'disabled']
+            ]);
+            CRUD::addField([
+                'name' => 'donate_type_id',
+                'type' => 'relationship',
+                'label' => 'Tipo',
+            ]);
+        }
+        // Somente o responsável pelo fiel e/ou o responsável pelo responsável pode alterar o campo STATUS
         CRUD::setValidation(DonateUpdateRequest::class);
         CRUD::addField([
             'name' => 'description',

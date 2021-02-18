@@ -76,9 +76,9 @@ return [
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,
 
-    'header_class' => 'app-header navbar navbar-color bg-green border-0',
+    'header_class' => 'app-header navbar navbar-color bg-cyan border-0',
     'body_class' => 'app aside-menu-fixed sidebar-lg-show',
-    'sidebar_class' => 'sidebar sidebar-light bg-green',
+    'sidebar_class' => 'sidebar sidebar-light bg-cyan',
     'footer_class' => 'app-footer bg-white',
     // hide it with d-none
     // change background color with bg-dark, bg-primary, bg-secondary, bg-danger, bg-warning, bg-success, bg-info, bg-blue, bg-light-blue, bg-indigo, bg-purple, bg-pink, bg-red, bg-orange, bg-yellow, bg-green, bg-teal, bg-cyan, bg-white

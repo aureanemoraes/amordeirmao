@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DirectorSeeder::class,
             ManagerSeeder::class,
-            ResponsableSeeder::class
+            ResponsableSeeder::class,
+            DonateSeeder::class
         ]);
     }
 }
