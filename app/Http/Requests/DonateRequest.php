@@ -27,7 +27,8 @@ class DonateRequest extends FormRequest
     {
         return [
             'description' => 'required|string',
-            'donate_type_id' => 'required|integer'
+            'donate_type_id' => 'required|integer',
+            'status' => 'required'
         ];
     }
 

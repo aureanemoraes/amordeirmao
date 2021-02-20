@@ -120,6 +120,10 @@ class User extends Authenticatable
     }
 
     public function getValidsIdsAttribute() {
+        // Admin: tudo
+        // Fiel: só pode ver as doações que ele mesmo cadastrou
+        // Diretor: doações cadastradas pelos seus fiés e fiés de seus gerentes
+        // Gerente: doações cadastradas pelos seus fiés
         $id = $this->attributes['id'];
         $director = Director::where('user_id', $id)->first();
         if(isset($director)) {
@@ -156,6 +160,18 @@ class User extends Authenticatable
             }
         }
         return $valid_ids;
+    }
+
+    public function getCurrentUserTypeAttribute() {
+        $id = $this->attributes['id'];
+        $is_director = Director::where('user_id', $id)->exists(); // Verificação se é um DIRETOR
+        if($is_director) {
+            return 'diretor';
+        }
+        $is_manager = Manager::where('user_id', $id)->exists(); // Verificação se é um GERENTE
+        if($is_manager) {
+            return 'gerente';
+        }
     }
 
     // Mutators
