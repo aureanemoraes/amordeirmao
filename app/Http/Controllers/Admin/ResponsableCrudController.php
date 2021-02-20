@@ -24,6 +24,14 @@ class ResponsableCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        // PERMISSÕES
+        $current_user = backpack_user(); // Usuário logado atualmente
+        // Verificação ADMIN
+        $is_admin = backpack_user()->is_admin; // Verificação se o usuário é ADMIN
+        if(!$is_admin) {
+            $this->crud->addClause('whereIn', 'responsable_id', $current_user->valids_ids);
+        }
+
         $responsable_id = request()->query('responsable');
         if(isset($responsable_id)) {
             $this->crud->addClause('where', 'responsable_id', '=', $responsable_id);
@@ -81,6 +89,18 @@ class ResponsableCrudController extends CrudController
 
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        // PERMISSÕES
+        $current_user = backpack_user(); // Usuário logado atualmente
+        $responsable_id = $this->crud->getCurrentEntry()->responsable_id; // Responsável atual
+
+        // Verificação ADMIN
+        $is_admin = backpack_user()->is_admin; // Verificação se o usuário é ADMIN
+        if($is_admin) {
+            $this->setupCreateOperation();
+        } else if(in_array($responsable_id, $current_user->valids_ids)) {
+            $this->setupCreateOperation();
+        } else {
+            $this->crud->denyAccess('update');
+        }
     }
 }
