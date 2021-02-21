@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 
-class User extends Authenticatable
+class   User extends Authenticatable
 {
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use HasFactory, Notifiable, SoftDeletes;
@@ -89,12 +89,12 @@ class User extends Authenticatable
     // Accessors
     public function getUserTypeAttribute() {
         $id = $this->attributes['id'];
-        $isDirector = Director::where('user_id', $id)->first();
-        if(isset($isDirector)) {
+        $isDirector = Director::where('user_id', $id)->exists();
+        if($isDirector) {
             return 'Diretor';
         } else {
-            $isManager = Manager::where('user_id', $id)->first();
-            if(isset($isManager)) {
+            $isManager = Manager::where('user_id', $id)->exists();
+            if($isManager) {
                 return 'Gerente';
             } else {
                 return 'Padrão';

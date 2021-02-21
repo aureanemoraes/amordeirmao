@@ -20,6 +20,10 @@ class ResponsableCrudController extends CrudController
         CRUD::setModel(\App\Models\Responsable::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/responsable');
         CRUD::setEntityNameStrings('responsável', 'responsáveis');
+        $current_user = backpack_user();
+        if($current_user->user_type == 'Padrão') {
+            $this->crud->denyAccess(['list', 'create', 'update', 'delete']);
+        }
     }
 
     protected function setupListOperation()
