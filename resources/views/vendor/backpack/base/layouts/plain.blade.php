@@ -2,6 +2,7 @@
 <html lang="{{ app()->getLocale() }}" dir="{{ config('backpack.base.html_direction') }}">
 <head>
     @include(backpack_view('inc.head'))
+    @yield('css')
 </head>
 <body class="app flex-row align-items-center">
 

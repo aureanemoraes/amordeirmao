@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Models\Director;
+use App\Models\Manager;
 use App\Models\Quality;
 use Backpack\CRUD\app\Http\Controllers\Auth\RegisterController as BackpackRegisterController;
+use Illuminate\Support\Arr;
 use Validator;
 
 
@@ -54,6 +57,14 @@ class RegisterController extends BackpackRegisterController
         }
 
         $qualities = Quality::all();
+        $managers = Manager::join('users', 'managers.user_id', '=', 'users.id')
+            ->select('users.name')->get()->toArray();
+        $directors = Director::join('users', 'directors.user_id', '=', 'users.id')
+            ->select('users.name')->get()->toArray();
+
+        $responsables = Arr::collapse($managers, $directors);
+
+        dd($responsables);
 
         $this->data['title'] = trans('backpack::base.register'); // set the page title
 

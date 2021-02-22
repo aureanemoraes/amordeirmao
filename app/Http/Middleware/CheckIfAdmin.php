@@ -28,8 +28,8 @@ class CheckIfAdmin
      */
     private function checkIfUserIsAdmin($user)
     {
-        // return ($user->is_admin == 1);
-        return true;
+        return ($user->is_validated == 1);
+        //return true;
     }
 
     /**
@@ -41,11 +41,16 @@ class CheckIfAdmin
      */
     private function respondToUnauthorizedRequest($request)
     {
+        //return view('not_validated');
+
+        return redirect()->guest(route('not_valid'));
+        /*
         if ($request->ajax() || $request->wantsJson()) {
             return response(trans('backpack::base.unauthorized'), 401);
         } else {
             return redirect()->guest(backpack_url('login'));
         }
+        */
     }
 
     /**
