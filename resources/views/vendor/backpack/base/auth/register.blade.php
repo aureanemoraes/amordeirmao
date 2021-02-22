@@ -234,8 +234,8 @@
                             <div>
                                 <select class="form-control{{ $errors->has('responsable_id') ? ' is-invalid' : '' }}" name="responsable_id" id="responsable_id" value="{{ old('responsable_id') }}">
                                     <option disabled selected>Selecione...</option>
-                                    @foreach($qualities as $responsable_id)
-                                        <option value="{{$responsable_id->id}}">{{$responsable_id->name}}</option>
+                                    @foreach($responsables as $responsable)
+                                        <option value="{{$responsable->id}}">{{$responsable->name}}</option>
                                     @endforeach
                                 </select>
 
@@ -319,7 +319,6 @@
                     $('#neighborhood').val(data.bairro);
                     $('#uf').val(data.uf);
                     console.log(data);
-
                 },
                 error: function (data) {
                     console.log(data);

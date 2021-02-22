@@ -60,14 +60,16 @@ class RegisterController extends BackpackRegisterController
         $managers = Manager::join('users', 'managers.user_id', '=', 'users.id')
             ->select('users.name')->get()->toArray();
         $directors = Director::join('users', 'directors.user_id', '=', 'users.id')
-            ->select('users.name')->get()->toArray();
+            ->select('users.id', 'users.name')->get()->toArray();
 
-        $responsables = Arr::collapse($managers, $directors);
+        $responsables = Arr::collapse([$managers, $directors]);
 
-        dd($responsables);
+        //dd($responsables);
 
         $this->data['title'] = trans('backpack::base.register'); // set the page title
 
-        return view(backpack_view('auth.register'), $this->data)->with('qualities', $qualities);
+        return view(backpack_view('auth.register'), $this->data)
+            ->with('qualities', $qualities)
+            ->with('responsables', $responsables);
     }
 }
