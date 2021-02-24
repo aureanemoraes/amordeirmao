@@ -9,7 +9,7 @@
         <h3>{{ trans('backpack::base.register') }}</h3>
         <div class="card">
             <div class="card-body">
-                <form  role="form" method="POST" action="{{ route('backpack.auth.register') }}">
+                <form  role="form" method="POST" action="{{ route('backpack.auth.register') }}" id="register_form">
                     {!! csrf_field() !!}
 
                     <section>
@@ -203,8 +203,8 @@
 
                                         @if ($errors->has('number_of_phone'))
                                             <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('number_of_phone') }}</strong>
-                                            </span>
+                                            <strong>{{ $errors->first('number_of_phone') }}</strong>
+                                        </span>
                                         @endif
                                     </div>
                                 </div>
@@ -218,14 +218,46 @@
 
                                         @if ($errors->has('type_of_phone'))
                                             <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('type_of_phone') }}</strong>
-                                        </span>
+                                        <strong>{{ $errors->first('type_of_phone') }}</strong>
+                                    </span>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-ghost-info"><i class='nav-icon la la-plus'></i> Adicionar</button>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label" for="number_of_phone_2">Telefone</label>
+
+                                    <div>
+                                        <input type="text" class="form-control{{ $errors->has('number_of_phone_2') ? ' is-invalid' : '' }}" name="number_of_phone_2" id="number_of_phone_2" value="{{ old('number_of_phone_2') }}">
+
+                                        @if ($errors->has('number_of_phone_2'))
+                                            <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('number_of_phone_2') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="control-label" for="type_of_phone_2">Tipo</label>
+
+                                    <div>
+                                        <input type="text" class="form-control{{ $errors->has('type_of_phone_2') ? ' is-invalid' : '' }}" name="type_of_phone_2" id="type_of_phone_2" value="{{ old('type_of_phone_2') }}" placeholder="Ex.: Principal, Recado">
+
+                                        @if ($errors->has('type_of_phone_2'))
+                                            <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('type_of_phone_2') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-ghost-info" id="add_phone"><i class='nav-icon la la-plus'></i> Adicionar</button>
                     </section>
 
                     <section>
@@ -234,9 +266,16 @@
                             <div>
                                 <select class="form-control{{ $errors->has('responsable_id') ? ' is-invalid' : '' }}" name="responsable_id" id="responsable_id" value="{{ old('responsable_id') }}">
                                     <option disabled selected>Selecione...</option>
-                                    @foreach($responsables as $responsable)
-                                        <option value="{{$responsable->id}}">{{$responsable->name}}</option>
-                                    @endforeach
+                                    <optgroup label="Diretores">
+                                        @foreach($directors as $responsable)
+                                            <option value="{{$responsable->id}}">{{$responsable->name}} - {{$responsable->cpf}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                    <optgroup label="Gerentes">
+                                        @foreach($managers as $responsable)
+                                            <option value="{{$responsable->id}}">{{$responsable->name}} - {{$responsable->cpf}}</option>
+                                        @endforeach
+                                    </optgroup>
                                 </select>
 
                                 @if ($errors->has('responsable_id'))
@@ -302,32 +341,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha512-0XDfGxFliYJPFrideYOoxdgNIvrwGTLnmK20xZbCAvPfLGQMzHUsaqZK8ZoH+luXGRxTrS46+Aq400nCnAT0/w==" crossorigin="anonymous"></script>
 
     <script>
-
-        $("#search_address").click(function (e) {
-            e.preventDefault();
-            let data = {
-                "_token": "{{ csrf_token() }}",
-                'zip_code' : $('#zip_code').val(),
-            };
-            $.ajax({
-                type: 'POST',
-                url: '/cep',
-                data: data,
-                dataType: 'json',
-                success: function (data) {
-                    $('#public_place').val(data.logradouro);
-                    $('#neighborhood').val(data.bairro);
-                    $('#uf').val(data.uf);
-                    console.log(data);
-                },
-                error: function (data) {
-                    console.log(data);
-                }
+        jQuery(document).ready(function($) {
+            $("#search_address").click(function (e) {
+                e.preventDefault();
+                let data = {
+                    "_token": "{{ csrf_token() }}",
+                    "zip_code" : $('#zip_code').val()
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/cep',
+                    data: data,
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#public_place').val(data.logradouro);
+                        $('#neighborhood').val(data.bairro);
+                        $('#uf').val(data.uf);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
             });
-        });
 
-        $("#cpf").mask("000.000.000-00");
-        $("#zip_code").mask("00000-000");
-        //$("#phone_1").mask("(00) 00000-0000");
+            $("#cpf").mask("000.000.000-00");
+            $("#zip_code").mask("00000-000");
+            $("#number_of_phone").mask("(96) 99999-9999");
+            $("#number_of_phone_2").mask("(96) 99999-9999");
+        });
     </script>
 @endsection

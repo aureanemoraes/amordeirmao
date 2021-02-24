@@ -7,34 +7,24 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AddressRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         // only allow updates if the user is logged in
         return backpack_auth()->check();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //'name' => 'required|min:5|max:255'
+            'zip_code' => 'max:8',
+            'public_place' => 'required|max:255',
+            'number' => 'required|max:10',
+            'neighborhood' => 'required|max:255',
+            'reference_place' => 'max:255',
+            'uf' => 'required|max:2',
         ];
     }
 
-    /**
-     * Get the validation attributes that apply to the request.
-     *
-     * @return array
-     */
     public function attributes()
     {
         return [
@@ -42,11 +32,6 @@ class AddressRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get the validation messages that apply to the request.
-     *
-     * @return array
-     */
     public function messages()
     {
         return [

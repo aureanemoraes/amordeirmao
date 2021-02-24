@@ -19,7 +19,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'cpf' => ['required', 'max:11', Rule::unique('users')->ignore($this->id), 'cpf'],
+            'cpf' => ['required', 'size:11', Rule::unique('users')->ignore($this->id), 'cpf'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($this->id)],
             'quality_id' => 'required|integer',
             'password' => 'required'

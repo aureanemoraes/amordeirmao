@@ -237,4 +237,11 @@ class DonateCrudController extends CrudController
 
 
     }
+
+    protected function setupDeleteOperation() {
+        if($this->crud->getCurrentEntry()->status == 'Concluída') {
+            $this->crud->denyAccess('delete');
+            $this->crud->removeButton('delete');
+        }
+    }
 }

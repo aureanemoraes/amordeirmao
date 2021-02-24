@@ -19,7 +19,7 @@ class Address extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['zip_code', 'public_place', 'number', 'neighborhood', 'reference_place', 'user_id'];
+    protected $fillable = ['zip_code', 'public_place', 'number', 'neighborhood', 'reference_place', 'user_id', 'uf'];
 
     // protected $hidden = [];
     // protected $dates = [];

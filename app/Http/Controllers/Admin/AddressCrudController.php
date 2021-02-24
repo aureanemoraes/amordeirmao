@@ -31,6 +31,7 @@ class AddressCrudController extends CrudController
         CRUD::addColumn(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
         CRUD::addColumn(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
         CRUD::addColumn(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
+        CRUD::addColumn(['name' => 'uf', 'type' => 'text', 'label' => 'UF']);
         CRUD::addColumn([
             // Select
             'label'     => 'Usuário',
@@ -57,6 +58,41 @@ class AddressCrudController extends CrudController
         CRUD::addField(['name' => 'number', 'type' => 'text', 'label' => 'Número']);
         CRUD::addField(['name' => 'neighborhood', 'type' => 'text', 'label' => 'Bairro']);
         CRUD::addField(['name' => 'reference_place', 'type' => 'text', 'label' => 'Ponto de referência']);
+        CRUD::addField([
+            'name' => 'uf',
+            'type' => 'select2_from_array',
+            'label' => 'UF',
+            'options' => [
+                'AC' => 'Acre',
+                'AL' => 'Alagoas',
+                'AP' => 'Amapá',
+                'AM' => 'Amazonas',
+                'BA' => 'Bahia',
+                'CE' => 'Ceará',
+                'DF' => 'Distrito Federal',
+                'ES' => 'Espirito Santo',
+                'GO' => 'Goiás',
+                'MA' => 'Maranhão',
+                'MS' => 'Mato Grosso do Sul',
+                'MT' => 'Mato Grosso',
+                'MG' => 'Minas Gerais',
+                'PA' => 'Pará',
+                'PB' => 'Paraíba',
+                'PR' => 'Paraná',
+                'PE' => 'Pernambuco',
+                'PI' => 'Piauí',
+                'RJ' => 'Rio de Janeiro',
+                'RN' => 'Rio Grande do Norte',
+                'RS' => 'Rio Grande do Sul',
+                'RO' => 'Rondônia',
+                'RR' => 'Roraima',
+                'SC' => 'Santa Catarina',
+                'SP' => 'São Paulo',
+                'SE' => 'Sergipe',
+                'TO' => 'Tocantins',
+            ]
+        ]);
+
         CRUD::addField([
             'label'     => "Usuários",
             'type'      => 'select2_multiple',
